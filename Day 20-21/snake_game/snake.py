@@ -12,16 +12,27 @@ class Snake:
     def __init__(self,screen:Screen):
         self.screen = screen
         for i in range(3):
-            self.add_length(-20*i,0) 
+            self.add_length(False) 
+            self.snake[i].goto(-20*i,0)
         self.head = self.snake[0]
 
-    def add_length(self,width:int,height:int):
+    def add_length(self,isEat:bool):
         new_snake = Turtle()
         new_snake.shape("square")
         new_snake.color("white")
         new_snake.penup()
-        new_snake.goto(width,height)
+        if isEat:
+            new_snake.goto(self.getTail().pos())
         self.snake.append(new_snake)
+
+    def did_collide_with_tail(self):
+        for i in self.snake[1:]:
+            if i.distance(self.head) < 10:
+                return True
+        return False
+
+    def getTail(self):
+        return self.snake[-1]
 
     def move_froward(self):
         self.screen.update()
